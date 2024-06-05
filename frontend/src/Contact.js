@@ -8,7 +8,7 @@ function Contact() {
       <p>Email: [your email address]</p>
       <p>Phone: [your phone number]</p>
       <p>Location: [your location]</p>
-      <a href="path/to/your/resume.pdf" target="_blank" rel="noopener noreferrer">
+      <a href="/home/makecake/Personal-Wabsite/frontend/files" target="_blank" rel="noopener noreferrer">
         Download Resume
       </a>
     </div>
