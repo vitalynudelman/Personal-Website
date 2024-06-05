@@ -9,7 +9,7 @@ body {
 .App {
   max-width: 1000px;
   margin: 0 auto;
-  padding: 40px;
+  padding: 100px 40px 40px;
 }
 
 nav {
