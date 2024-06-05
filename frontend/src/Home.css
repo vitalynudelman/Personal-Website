@@ -1,0 +1,20 @@
+.App-header {
+    padding-top: 80px;
+  }
+  
+  .App-header h1 {
+    font-size: 48px;
+    margin-bottom: 10px;
+  }
+  
+  .App-header h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
+    color: #a4c2f4;
+  }
+  
+  .App-header p {
+    font-size: 18px;
+    line-height: 1.6;
+    margin-bottom: 20px;
+  }
