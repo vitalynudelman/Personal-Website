@@ -9,7 +9,8 @@ body {
 .App {
   max-width: 1000px;
   margin: 0 auto;
-  padding: 100px 40px 40px;
+  padding: 40px;
+  position: relative;
 }
 
 nav {
@@ -17,6 +18,18 @@ nav {
   top: 20px;
   left: 20px;
   z-index: 100;
+  padding-right: 20px;
+}
+
+nav::after {
+  content: '';
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 60px;
+  background-color: #1c1c1e;
+  z-index: -1;
 }
 
 nav ul {
