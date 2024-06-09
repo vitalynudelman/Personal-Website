@@ -1,6 +1,8 @@
 import React from 'react';
 import './Home.css';
 import Projects from './Projects';
+import Skills from './Skills';
+import Certifications from './Certifications';
 
 function Home() {
   return (
@@ -21,6 +23,8 @@ function Home() {
         </p>
         <p>Enjoy and feel free to contact me.</p>
       </header>
+      <Skills />
+      <Certifications />
       <Projects />
     </div>
   );

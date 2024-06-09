@@ -1,0 +1,33 @@
+.Skills {
+    padding: 40px 0;
+  }
+  
+  .Skills h2 {
+    font-size: 32px;
+    margin-bottom: 20px;
+    color: #6c8cd5;
+  }
+  
+  .skill-list {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+    gap: 20px;
+  }
+  
+  .skill {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+  }
+  
+  .skill img {
+    width: 50px;
+    height: 50px;
+    margin-bottom: 10px;
+  }
+  
+  .skill p {
+    font-size: 16px;
+    color: #d1d1d1;
+  }
