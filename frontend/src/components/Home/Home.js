@@ -1,8 +1,8 @@
 import React from 'react';
 import './Home.css';
-import Projects from './Projects';
-import Skills from './Skills';
-import Certifications from './components/Certifications/Certifications';
+import Projects from '../Projects/Projects';
+import Skills from '../Skills/Skills';
+import Certifications from '../Certifications/Certifications';
 
 function Home() {
   return (

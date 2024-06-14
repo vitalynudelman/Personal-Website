@@ -3,8 +3,8 @@ import './Certifications.css';
 
 function Certifications() {
   const certifications = [
-    { name: 'AWS Certified Solutions Architect', icon: 'path/to/aws-certification-icon.png' },
-    { name: 'Kubernetes Administrator', icon: 'path/to/kubernetes-certification-icon.png' },
+    { name: 'AWS Certified Solutions Architect', icon: 'certifications/aws-solutions-architect-associate.png' },
+    { name: 'DevOps', icon: 'certifications/certified-devops-practitioner.png' },
     // Add more certifications and their corresponding icons
   ];
 

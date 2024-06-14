@@ -1,8 +1,8 @@
 import React from 'react';
 import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
 import './App.css';
-import Home from '../../Home';
-import Contact from '../../Contact';
+import Home from '../Home/Home';
+import Contact from '../Contact/Contact';
 
 function App() {
   return (
