@@ -5,9 +5,9 @@ function Contact() {
   return (
     <div className="Contact">
       <h2>Contact Me</h2>
-      <p>Email: [your email address]</p>
-      <p>Phone: [your phone number]</p>
-      <p>Location: [your location]</p>
+      <p>Email: v.nudelman@gmail.com</p>
+      <p>Phone: +972 54 648 7047</p>
+      <p>Location: Israel</p>
 
       <div className="resume-section">
         <h3>Resume</h3>

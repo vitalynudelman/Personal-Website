@@ -14,6 +14,7 @@ function Skills() {
     { name: 'Artifactory', icon: 'skills/artifactory-logo.png' },
     { name: 'Jenkins', icon: 'skills/jenkins-logo.png' },
     { name: 'Ansible', icon: 'skills/ansible-logo.png' },
+    { name: 'Elasticsearch', icon: 'skills/elasticsearch-logo.png' },
     { name: 'Prometheus', icon: 'skills/prometheus-logo.png' },
     { name: 'Grafana', icon: 'skills/grafana-logo.png' },
     { name: 'AWS', icon: 'skills/aws-logo-dark.png' },
