@@ -52,7 +52,7 @@ nav ul li:last-child {
 }
 
 nav ul li a {
-  color: #6c8cd5;
+  color: #a4c2f4;
   text-decoration: none;
   font-size: 18px;
   position: relative;
@@ -65,7 +65,7 @@ nav ul li a::after {
   bottom: -2px;
   width: 100%;
   height: 2px;
-  background-color: #6c8cd5;
+  background-color: #a4c2f4;
   transform: scaleX(0);
   transition: transform 0.3s;
 }

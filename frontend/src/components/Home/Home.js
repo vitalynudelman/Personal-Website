@@ -11,7 +11,7 @@ function Home() {
       <header className="App-header">
         <div className="profile-container">
           <div className="intro-text">
-            <h1>Vitaly</h1>
+            <h1>Vitaly Nudelman</h1>
             <h2>DevOps Engineer</h2>
             <p>Welcome to My Website!</p>
             <p>
