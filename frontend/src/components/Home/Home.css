@@ -20,16 +20,42 @@
 .intro-text h1 {
   font-size: 48px;
   margin-bottom: 10px;
+  transition: color 0.3s;
+}
+
+.dark .intro-text h1 {
+  color: #ffffff;
+}
+
+.light .intro-text h1 {
+  color: #4C566A; /*333333*/
 }
 
 .intro-text h2 {
   font-size: 24px;
   margin-bottom: 20px;
+  transition: color 0.3s;
+}
+
+.dark .intro-text h2 {
   color: #a4c2f4;
+}
+
+.light .intro-text h2 {
+  color: #5E81AC;
 }
 
 .intro-text p {
   font-size: 18px;
   line-height: 1.6;
   margin-bottom: 20px;
+  transition: color 0.3s;
+}
+
+.dark .intro-text p {
+  color: #d1d1d1;
+}
+
+.light .intro-text p {
+  color: #444444;
 }
