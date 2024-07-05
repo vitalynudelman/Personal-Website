@@ -59,7 +59,7 @@ nav::after {
 }
 
 .light nav::after {
-  background-color: #D8DEE9  /* var(--bg-color-light); */
+  background-color: #D8DEE9;
 }
 
 nav ul {
@@ -115,31 +115,43 @@ nav ul li a:hover::after {
   transform: scaleX(1);
 }
 
-button {
-  background-color: transparent;
-  border: 1px solid;
-  padding: 5px 10px;
+.theme-toggle {
+  position: fixed;
+  top: 10px;
+  right: 20px;
+  z-index: 1000;
+  background: none;
+  border: none;
   cursor: pointer;
-  font-size: 16px;
-  transition: background-color 0.3s, color 0.3s;
+  font-size: 24px;
+  padding: 5px;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  transition: background-color 0.3s, transform 0.3s;
 }
 
-.dark button {
+.dark .theme-toggle {
   color: var(--text-color-dark);
-  border-color: var(--text-color-dark);
+  background-color: rgba(255, 255, 255, 0.1);
 }
 
-.light button {
+.light .theme-toggle {
   color: var(--text-color-light);
-  border-color: var(--text-color-light);
+  background-color: rgba(0, 0, 0, 0.1);
 }
 
-.dark button:hover {
-  background-color: var(--text-color-dark);
-  color: var(--bg-color-dark);
+.theme-toggle:hover {
+  transform: scale(1.1);
 }
 
-.light button:hover {
-  background-color: var(--text-color-light);
-  color: var(--bg-color-light);
+.dark .theme-toggle:hover {
+  background-color: rgba(255, 255, 255, 0.2);
+}
+
+.light .theme-toggle:hover {
+  background-color: rgba(0, 0, 0, 0.2);
 }

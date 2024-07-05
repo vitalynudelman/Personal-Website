@@ -31,11 +31,16 @@ function App() {
             <li>
               <Link to="/contact">Contact</Link>
             </li>
-            <li>
-              <button onClick={toggleTheme}>Toggle Theme</button>
-            </li>
           </ul>
         </nav>
+
+        <button 
+          onClick={toggleTheme} 
+          className="theme-toggle" 
+          aria-label="Toggle theme"
+        >
+          {theme === 'dark' ? '☀️' : '🌙'}
+        </button>
 
         <Routes>
           <Route exact path="/" element={<Home />} />
