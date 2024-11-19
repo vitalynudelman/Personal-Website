@@ -21,8 +21,8 @@ function Home() {
               designing and implementing efficient systems and processes.
             </p>
             <p>
-              This website will showcase my personal projects and tools that I've written to make my and my team's working
-              process smoother and more efficient, as well as projects that I've made just for fun.
+              This website will showcase my personal projects and tools that I've written to make my team's working
+              process smoother and more efficient, as well as projects that I've made just for learning and fun.
             </p>
             <p>Enjoy and feel free to contact me.</p>
           </div>

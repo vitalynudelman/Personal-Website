@@ -4,16 +4,20 @@ import './Projects.css';
 function Projects() {
   const projects = [
     {
-      title: 'Project 1',
-      description: 'Description of Project 1.',
-      githubLink: 'https://github.com/your-username/project1',
+      title: 'Complete CICD Pipeline',
+      description: 'Complete Jenkins pipeline as part of DevOps course.',
+      githubLink: 'https://github.com/makexcake/complete-pipeline-jenkins',
     },
     {
-      title: 'Project 2',
-      description: 'Description of Project 2.',
-      githubLink: 'https://github.com/your-username/project2',
+      title: 'Elasticdump GUI',
+      description: 'A web application that allows users to import and export data from Elasticsearch using the elasticdump library.',
+      githubLink: 'https://github.com/makexcake/elasticdump-gui',
     },
-    // Add more projects as needed
+    {
+      title: 'Lab Provisoning With Ansible',
+      description: 'Provisioning lab using Ansible and Terraform.',
+      githubLink: 'https://github.com/makexcake/deploy-lab-with-ansible',
+    }
   ];
 
   return (

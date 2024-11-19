@@ -7,7 +7,7 @@ function Contact() {
       <h2>Contact Me</h2>
       <p>Email: v.nudelman@gmail.com</p>
       <p>Phone: +972 54 648 7047</p>
-      <p>Location: Israel</p>
+      <p>GIT: https://github.com/makexcake</p>
 
       <div className="resume-section">
         <h3>Resume</h3>
