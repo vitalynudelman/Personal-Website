@@ -1,16 +1,57 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Routes, Link } from 'react-router-dom';
+import { BrowserRouter as Router, Route, Routes, Link, useLocation } from 'react-router-dom';
 import './App.css';
 import Home from '../Home/Home';
 import Contact from '../Contact/Contact';
 
-function App() {
-  const [theme, setTheme] = useState('dark');
+// Navigation component with active state
+const Navigation = ({ theme, toggleTheme }) => {
+  const location = useLocation();
+  
+  return (
+    <nav className="navbar">
+      <div className="nav-logo">VN</div>
+      <ul className="nav-links">
+        <li className={location.pathname === '/' ? 'active' : ''}>
+          <Link to="/">Home</Link>
+        </li>
+        <li className={location.pathname === '/contact' ? 'active' : ''}>
+          <Link to="/contact">Contact</Link>
+        </li>
+      </ul>
+      
+      <button 
+        onClick={toggleTheme} 
+        className="theme-toggle" 
+        aria-label="Toggle theme"
+      >
+        {theme === 'dark' ? '☀️' : '🌙'}
+      </button>
+    </nav>
+  );
+};
+
+// App content with navigation context
+const AppContent = () => {
+  const [theme, setTheme] = useState(() => {
+    const savedTheme = localStorage.getItem('theme');
+    return savedTheme || 'dark';
+  });
+  
+  const [isLoading, setIsLoading] = useState(true);
 
   useEffect(() => {
-    // Apply the initial theme to the body
+    // Apply theme and persist to localStorage
     document.body.className = theme;
-  }, []);
+    localStorage.setItem('theme', theme);
+    
+    // Add smooth page load transition
+    const timer = setTimeout(() => {
+      setIsLoading(false);
+    }, 500);
+    
+    return () => clearTimeout(timer);
+  }, [theme]);
 
   const toggleTheme = () => {
     setTheme(prevTheme => {
@@ -20,33 +61,32 @@ function App() {
     });
   };
 
+  if (isLoading) {
+    return <div className="page-loader"></div>;
+  }
+
   return (
-    <Router>
-      <div className="App">
-        <nav>
-          <ul>
-            <li>
-              <Link to="/">Home</Link>
-            </li>
-            <li>
-              <Link to="/contact">Contact</Link>
-            </li>
-          </ul>
-        </nav>
-
-        <button 
-          onClick={toggleTheme} 
-          className="theme-toggle" 
-          aria-label="Toggle theme"
-        >
-          {theme === 'dark' ? '☀️' : '🌙'}
-        </button>
-
+    <div className="App">
+      <Navigation theme={theme} toggleTheme={toggleTheme} />
+      
+      <main className="content">
         <Routes>
-          <Route exact path="/" element={<Home />} />
+          <Route path="/" element={<Home />} />
           <Route path="/contact" element={<Contact />} />
         </Routes>
-      </div>
+      </main>
+      
+      <footer className="footer">
+        <p>&copy; {new Date().getFullYear()} Vitaly Nudelman</p>
+      </footer>
+    </div>
+  );
+};
+
+function App() {
+  return (
+    <Router>
+      <AppContent />
     </Router>
   );
 }
