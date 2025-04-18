@@ -11,6 +11,7 @@ function Skills() {
     { name: 'Linux', icon: 'skills/linux-logo.png', category: 'os' },
     { name: 'BASH', icon: 'skills/bash-logo.jpg', category: 'programming' },
     { name: 'Python', icon: 'skills/python-logo.png', category: 'programming' },
+    { name: 'C++', icon: 'skills/cpp-logo.png', category: 'programming' },
     { name: 'Git', icon: 'skills/git-logo.png', category: 'tools' },
     { name: 'Docker', icon: 'skills/docker-logo.png', category: 'container' },
     { name: 'Kubernetes', icon: 'skills/k8s-logo.png', category: 'container' },
