@@ -80,7 +80,7 @@ function Contact() {
               <div className="contact-icon">📧</div>
               <div className="contact-details">
                 <h3>Email</h3>
-                <p>vitaly@example.com</p>
+                <p>v.nudelman@gmail.com</p>
               </div>
             </div>
             
@@ -88,8 +88,8 @@ function Contact() {
               <div className="contact-icon">💼</div>
               <div className="contact-details">
                 <h3>LinkedIn</h3>
-                <a href="https://linkedin.com/in/example" target="_blank" rel="noopener noreferrer">
-                  linkedin.com/in/example
+                <a href="https://www.linkedin.com/in/vitaly-nudelman-932750264/" target="_blank" rel="noopener noreferrer">
+                  Vitaly Nudelman
                 </a>
               </div>
             </div>
@@ -98,8 +98,8 @@ function Contact() {
               <div className="contact-icon">💻</div>
               <div className="contact-details">
                 <h3>GitHub</h3>
-                <a href="https://github.com/makexcake" target="_blank" rel="noopener noreferrer">
-                  github.com/makexcake
+                <a href="https://github.com/vitalynudelman" target="_blank" rel="noopener noreferrer">
+                  github.com/vitalynudelman
                 </a>
               </div>
             </div>
