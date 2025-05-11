@@ -76,13 +76,6 @@ function Contact() {
         
         <div className="contact-container">
           <div className="contact-info">
-            <div className="contact-method">
-              <div className="contact-icon">📧</div>
-              <div className="contact-details">
-                <h3>Email</h3>
-                <p>v.nudelman@gmail.com</p>
-              </div>
-            </div>
             
             <div className="contact-method">
               <div className="contact-icon">💼</div>
