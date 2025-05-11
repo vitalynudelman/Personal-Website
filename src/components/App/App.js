@@ -7,26 +7,49 @@ import Contact from '../Contact/Contact';
 // Navigation component with active state
 const Navigation = ({ theme, toggleTheme }) => {
   const location = useLocation();
+  const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
+  
+  const toggleMobileMenu = () => {
+    setMobileMenuOpen(!mobileMenuOpen);
+  };
+  
+  const closeMobileMenu = () => {
+    setMobileMenuOpen(false);
+  };
   
   return (
     <nav className="navbar">
       <div className="nav-logo">VN</div>
-      <ul className="nav-links">
+      
+      <ul className={`nav-links ${mobileMenuOpen ? 'mobile-open' : ''}`}>
         <li className={location.pathname === '/' ? 'active' : ''}>
-          <Link to="/">Home</Link>
+          <Link to="/" onClick={closeMobileMenu}>Home</Link>
         </li>
         <li className={location.pathname === '/contact' ? 'active' : ''}>
-          <Link to="/contact">Contact</Link>
+          <Link to="/contact" onClick={closeMobileMenu}>Contact</Link>
         </li>
       </ul>
       
-      <button 
-        onClick={toggleTheme} 
-        className="theme-toggle" 
-        aria-label="Toggle theme"
-      >
-        {theme === 'dark' ? '☀️' : '🌙'}
-      </button>
+      <div className="navbar-controls">
+        <button 
+          onClick={toggleTheme} 
+          className="theme-toggle" 
+          aria-label="Toggle theme"
+        >
+          {theme === 'dark' ? '☀️' : '🌙'}
+        </button>
+        
+        <button 
+          className="mobile-menu-toggle"
+          onClick={toggleMobileMenu}
+          aria-label="Toggle navigation menu"
+          aria-expanded={mobileMenuOpen}
+        >
+          <span className="hamburger-line"></span>
+          <span className="hamburger-line"></span>
+          <span className="hamburger-line"></span>
+        </button>
+      </div>
     </nav>
   );
 };

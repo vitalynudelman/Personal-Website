@@ -22,6 +22,9 @@ body {
   -moz-osx-font-smoothing: grayscale;
   line-height: 1.6;
   min-height: 100vh;
+  overflow-x: hidden;
+  touch-action: manipulation; /* Improves touch interactions */
+  -webkit-tap-highlight-color: transparent; /* Removes tap highlight on mobile */
 }
 
 /* Smooth scrolling to section anchors */
@@ -106,4 +109,40 @@ code {
   clip: rect(0, 0, 0, 0);
   white-space: nowrap;
   border-width: 0;
+}
+
+/* Mobile optimizations */
+* {
+  -webkit-overflow-scrolling: touch; /* Momentum scrolling on iOS */
+}
+
+/* Make form elements, buttons and links more touch-friendly */
+button,
+input,
+textarea,
+select,
+a {
+  touch-action: manipulation;
+}
+
+/* Improve tap targets for mobile */
+@media (max-width: 768px) {
+  button, 
+  input[type="button"], 
+  input[type="submit"],
+  a.cta-button,
+  a.download-button,
+  .category-button {
+    min-height: 44px; /* Apple's recommended minimum tap target size */
+  }
+  
+  /* Fix mobile viewport issues */
+  input, textarea, select {
+    font-size: 16px; /* Prevents iOS zoom on input focus */
+  }
+  
+  /* Improve touch targets */
+  a, button {
+    padding: 8px 12px;
+  }
 }
