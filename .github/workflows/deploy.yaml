@@ -39,8 +39,8 @@ jobs:
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
           echo "actions_branch_name=actions/version-bump-$(date +%s)" >> $GITHUB_OUTPUT
-          git checkout -b s"${{ steps.create_branch.outputs.actions_branch_name }}"
-      
+          git checkout -b ${{ steps.create_branch.outputs.actions_branch_name }}
+
       - name: Bump version
         if: steps.check.outputs.skip == 'false'
         id: version
