@@ -88,6 +88,7 @@ jobs:
         with:
           token: ${{ secrets.GIT_TOKEN }}
           branch: ${{ steps.create_branch.outputs.actions_branch_name }}
+          base: main
           title: "chore: bump version to ${{ steps.version.outputs.new_version }}"
           body: |
             Automated version bump to ${{ steps.version.outputs.new_version }}
