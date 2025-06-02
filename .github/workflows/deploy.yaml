@@ -36,6 +36,8 @@ jobs:
         id: create_branch
         if: steps.check.outputs.skip == 'false'
         run: |
+          git config --local user.email "action@github.com"
+          git config --local user.name "GitHub Action"
           branch_name=actions/version-bump-$(date +%s)
           echo "actions_branch_name=$branch_name" >> $GITHUB_OUTPUT
           git checkout -b $branch_name
