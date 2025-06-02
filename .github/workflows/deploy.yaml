@@ -93,15 +93,26 @@ jobs:
             ## Docker Image
             - `${{ secrets.DOCKER_USERNAME }}/personal-website:${{ steps.version.outputs.new_version }}`
             - `${{ secrets.DOCKER_USERNAME }}/personal-website:latest`
+            
+            ---
+            🤖 This PR will be automatically merged once checks pass.
           labels: |
             automated
             version-bump
-          branch: cicd/auto-version-bump-${{ github.run_number }}
+          branch: actions/version-bump-${{ github.run_number }}
           delete-branch: true
 
-      - name: PR Created
+      - name: Enable Auto-merge
+        if: steps.cpr.outputs.pull-request-number
+        run: |
+          gh pr merge ${{ steps.cpr.outputs.pull-request-number }} --auto --squash --delete-branch
+        env:
+          GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
+
+      - name: Auto-merge Status
         if: steps.cpr.outputs.pull-request-number
         run: |
           echo "✅ Pull Request created successfully!"
           echo "PR Number: ${{ steps.cpr.outputs.pull-request-number }}"
           echo "PR URL: ${{ steps.cpr.outputs.pull-request-url }}"
+          echo "🤖 Auto-merge enabled - will merge automatically once checks pass"
