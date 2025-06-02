@@ -1,4 +1,4 @@
-name: Build and Deploy
+name: Build and Deploy with PR
 
 on:
   push:
@@ -22,26 +22,43 @@ jobs:
         with:
           node-version: '21'
       
-      - name: Configure Git
+      - name: Check if version bump is needed
+        id: check
+        run: |
+          # Skip if last commit was a version bump
+          if git log -1 --pretty=%B | grep -q "chore: bump version"; then
+            echo "skip=true" >> $GITHUB_OUTPUT
+          else
+            echo "skip=false" >> $GITHUB_OUTPUT
+          fi
+      
+      - name: Create version bump branch
+        if: steps.check.outputs.skip == 'false'
         run: |
           git config --local user.email "action@github.com"
           git config --local user.name "GitHub Action"
+          git checkout -b version-bump-${{ github.run_number }}
       
       - name: Bump version
+        if: steps.check.outputs.skip == 'false'
         id: version
         run: |
-          # Bump patch version by default (you can change to minor or major)
-          npm version patch -m "chore: bump version to %s [skip ci]"
+          npm version patch -m "chore: bump version to %s"
           echo "new_version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
+      
+      - name: Get current version
+        id: current_version
+        run: |
+          echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
       
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
       
-      - name: Login to Docker Registry
+      - name: Login to docker registry
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
-          password: ${{ secrets.DOCKER_PASSWORD }}
+          password: ${{ secrets.DOCKER_TOKEN }}
       
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
@@ -49,12 +66,28 @@ jobs:
           context: .
           push: true
           tags: |
-            ${{ secrets.DOCKER_USERNAME }}/personal-website:${{ steps.version.outputs.new_version }}
+            ${{ secrets.DOCKER_USERNAME }}/personal-website:${{ steps.current_version.outputs.version }}
             ${{ secrets.DOCKER_USERNAME }}/personal-website:latest
           cache-from: type=gha
           cache-to: type=gha,mode=max
-      
-      - name: Push version changes
+
+      - name: Push version branch
+        if: steps.check.outputs.skip == 'false'
         run: |
-          git push origin main
-          git push --tags
+          git push origin version-bump-${{ github.run_number }}
+      
+      - name: Create Pull Request
+        if: steps.check.outputs.skip == 'false'
+        uses: peter-evans/create-pull-request@v5
+        with:
+          token: ${{ secrets.GIT_TOKEN }}
+          branch: version-bump-${{ github.run_number }}
+          title: "chore: bump version to ${{ steps.version.outputs.new_version }}"
+          body: |
+            Automated version bump to ${{ steps.version.outputs.new_version }}
+            
+            This PR was automatically created by GitHub Actions.
+          labels: |
+            automated
+            version-bump
+      
