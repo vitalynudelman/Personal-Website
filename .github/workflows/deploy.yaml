@@ -6,6 +6,10 @@ on:
       - main
   workflow_dispatch:
 
+permissions:
+  contents: write
+  pull-requests: write
+
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
@@ -21,12 +25,12 @@ jobs:
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
-      
+          
       - name: Setup Node.js
         uses: actions/setup-node@v4
         with:
           node-version: '21'
-      
+          
       - name: Check if version bump is needed
         id: check
         run: |
@@ -36,14 +40,6 @@ jobs:
           else
             echo "skip=false" >> $GITHUB_OUTPUT
           fi
-      
-      - name: Create version bump branch
-        id: create_branch
-        if: steps.check.outputs.skip == 'false'
-        run: |
-          branch_name=actions/version-bump-$(date +%s)
-          echo "actions_branch_name=$branch_name" >> $GITHUB_OUTPUT
-          git checkout -b $branch_name
 
       - name: Bump version
         if: steps.check.outputs.skip == 'false'
@@ -51,21 +47,21 @@ jobs:
         run: |
           npm version patch -m "chore: bump version to %s"
           echo "new_version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
-      
+          
       - name: Get current version
         id: current_version
         run: |
           echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
-      
+          
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-      
+        
       - name: Login to docker registry
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-      
+          
       - name: Build and push Docker image
         uses: docker/build-push-action@v5
         with:
@@ -77,24 +73,35 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Push version branch
-        if: steps.check.outputs.skip == 'false'
-        run: |
-          git push origin ${{ steps.create_branch.outputs.actions_branch_name }}
-      
       - name: Create Pull Request
         if: steps.check.outputs.skip == 'false'
+        id: cpr
         uses: peter-evans/create-pull-request@v5
         with:
           token: ${{ secrets.GIT_TOKEN }}
-          branch: ${{ steps.create_branch.outputs.actions_branch_name }}
-          base: main
+          commit-message: "chore: bump version to ${{ steps.version.outputs.new_version }}"
           title: "chore: bump version to ${{ steps.version.outputs.new_version }}"
           body: |
             Automated version bump to ${{ steps.version.outputs.new_version }}
             
             This PR was automatically created by GitHub Actions.
+            
+            ## Changes
+            - Updated package.json version to ${{ steps.version.outputs.new_version }}
+            - Built and pushed Docker image with new version tag
+            
+            ## Docker Image
+            - `${{ secrets.DOCKER_USERNAME }}/personal-website:${{ steps.version.outputs.new_version }}`
+            - `${{ secrets.DOCKER_USERNAME }}/personal-website:latest`
           labels: |
             automated
             version-bump
-      
+          branch: cicd/auto-version-bump-${{ github.run_number }}
+          delete-branch: true
+
+      - name: PR Created
+        if: steps.cpr.outputs.pull-request-number
+        run: |
+          echo "✅ Pull Request created successfully!"
+          echo "PR Number: ${{ steps.cpr.outputs.pull-request-number }}"
+          echo "PR URL: ${{ steps.cpr.outputs.pull-request-url }}"
