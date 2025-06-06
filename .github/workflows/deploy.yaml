@@ -91,8 +91,8 @@ jobs:
             - Built and pushed Docker image with new version tag
             
             ## Docker Image
-            - `${{ secrets.DOCKER_USERNAME }}/personal-website:${{ steps.version.outputs.new_version }}`
-            - `${{ secrets.DOCKER_USERNAME }}/personal-website:latest`
+            - `$personal-website:${{ steps.version.outputs.new_version }}`
+            - `$personal-website:latest`
             
             ---
             🤖 This PR will be automatically merged once checks pass.
@@ -116,3 +116,17 @@ jobs:
           echo "PR Number: ${{ steps.cpr.outputs.pull-request-number }}"
           echo "PR URL: ${{ steps.cpr.outputs.pull-request-url }}"
           echo "🤖 Auto-merge enabled - will merge automatically once checks pass"
+
+      - name: Deploy to Server
+        if: steps.cpr.outputs.pull-request-number
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.SERVER_IP }}
+          username: ${{ secrets.SSH_USER }}
+          key: ${{ secrets.SSH_KEY }}
+          port: ${{ secrets.PORT || 22 }}
+          script: |
+            cd website
+            echo "starting deploy script"
+            docker compose up -d
+            echo "Deploy script finished running"
