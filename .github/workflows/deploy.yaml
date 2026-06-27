@@ -2,9 +2,8 @@ name: Build and Deploy with PR
 
 on:
   push:
-    branches:
-      - main
-  workflow_dispatch:
+    branches-ignore:
+      - 'ignore**'
 
 permissions:
   contents: write
@@ -13,7 +12,7 @@ permissions:
 jobs:
   build-and-deploy:
     runs-on: ubuntu-latest
-    
+
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
@@ -22,19 +21,21 @@ jobs:
           fetch-depth: 0
 
       - name: Configure Git user
+        if: github.ref_name == 'main'
         run: |
           git config --global user.name "GitHub Actions"
           git config --global user.email "actions@github.com"
-          
+
       - name: Setup Node.js
+        if: github.ref_name == 'main'
         uses: actions/setup-node@v4
         with:
           node-version: '21'
-          
+
       - name: Check if version bump is needed
+        if: github.ref_name == 'main'
         id: check
         run: |
-          # Skip if last commit was a version bump
           if git log -1 --pretty=%B | grep -q "chore: bump version"; then
             echo "skip=true" >> $GITHUB_OUTPUT
           else
@@ -42,28 +43,45 @@ jobs:
           fi
 
       - name: Bump version
-        if: steps.check.outputs.skip == 'false'
+        if: github.ref_name == 'main' && steps.check.outputs.skip == 'false'
         id: version
         run: |
           npm version patch -m "chore: bump version to %s"
           echo "new_version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
-          
+
       - name: Get current version
+        if: github.ref_name == 'main'
         id: current_version
         run: |
           echo "version=$(node -p "require('./package.json').version")" >> $GITHUB_OUTPUT
-          
+
+      - name: Get sanitized branch tag
+        if: github.ref_name != 'main'
+        id: branch_tag
+        run: echo "tag=${GITHUB_REF_NAME//\//-}" >> $GITHUB_OUTPUT
+
       - name: Set up Docker Buildx
         uses: docker/setup-buildx-action@v3
-        
+
       - name: Login to docker registry
         uses: docker/login-action@v3
         with:
           username: ${{ secrets.DOCKER_USERNAME }}
           password: ${{ secrets.DOCKER_PASSWORD }}
-          
-      - name: Build and push Docker image
-        uses: docker/build-push-action@v5
+
+      - name: Build and push Docker image (branch)
+        if: github.ref_name != 'main'
+        uses: docker/build-push-action@v6
+        with:
+          context: .
+          push: true
+          tags: ${{ secrets.DOCKER_USERNAME }}/personal-website:${{ steps.branch_tag.outputs.tag }}
+          cache-from: type=gha
+          cache-to: type=gha,mode=max
+
+      - name: Build and push Docker image (main)
+        if: github.ref_name == 'main'
+        uses: docker/build-push-action@v6
         with:
           context: .
           push: true
@@ -74,7 +92,7 @@ jobs:
           cache-to: type=gha,mode=max
 
       - name: Create Pull Request
-        if: steps.check.outputs.skip == 'false'
+        if: github.ref_name == 'main' && steps.check.outputs.skip == 'false'
         id: cpr
         uses: peter-evans/create-pull-request@v5
         with:
@@ -83,17 +101,17 @@ jobs:
           title: "chore: bump version to ${{ steps.version.outputs.new_version }}"
           body: |
             Automated version bump to ${{ steps.version.outputs.new_version }}
-            
+
             This PR was automatically created by GitHub Actions.
-            
+
             ## Changes
             - Updated package.json version to ${{ steps.version.outputs.new_version }}
             - Built and pushed Docker image with new version tag
-            
+
             ## Docker Image
             - `$personal-website:${{ steps.version.outputs.new_version }}`
             - `$personal-website:latest`
-            
+
             ---
             🤖 This PR will be automatically merged once checks pass.
           labels: |
@@ -103,14 +121,14 @@ jobs:
           delete-branch: true
 
       - name: Enable Auto-merge
-        if: steps.cpr.outputs.pull-request-number
+        if: github.ref_name == 'main' && steps.cpr.outputs.pull-request-number
         run: |
           gh pr merge ${{ steps.cpr.outputs.pull-request-number }} --auto --squash --delete-branch
         env:
           GITHUB_TOKEN: ${{ secrets.GIT_TOKEN }}
 
       - name: Auto-merge Status
-        if: steps.cpr.outputs.pull-request-number
+        if: github.ref_name == 'main' && steps.cpr.outputs.pull-request-number
         run: |
           echo "✅ Pull Request created successfully!"
           echo "PR Number: ${{ steps.cpr.outputs.pull-request-number }}"
@@ -118,7 +136,7 @@ jobs:
           echo "🤖 Auto-merge enabled - will merge automatically once checks pass"
 
       - name: Deploy to Server
-        if: steps.cpr.outputs.pull-request-number
+        if: github.ref_name == 'main' && steps.cpr.outputs.pull-request-number
         uses: appleboy/ssh-action@v1.0.3
         with:
           host: ${{ secrets.SERVER_IP }}
