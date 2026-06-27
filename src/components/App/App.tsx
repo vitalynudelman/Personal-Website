@@ -4,23 +4,22 @@ import './App.css';
 import Home from '../Home/Home';
 import Contact from '../Contact/Contact';
 
-// Navigation component with active state
-const Navigation = ({ theme, toggleTheme }) => {
+interface NavigationProps {
+  theme: string;
+  toggleTheme: () => void;
+}
+
+const Navigation: React.FC<NavigationProps> = ({ theme, toggleTheme }) => {
   const location = useLocation();
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
-  
-  const toggleMobileMenu = () => {
-    setMobileMenuOpen(!mobileMenuOpen);
-  };
-  
-  const closeMobileMenu = () => {
-    setMobileMenuOpen(false);
-  };
-  
+
+  const toggleMobileMenu = () => setMobileMenuOpen(prev => !prev);
+  const closeMobileMenu = () => setMobileMenuOpen(false);
+
   return (
     <nav className="navbar">
       <div className="nav-logo">VN</div>
-      
+
       <ul className={`nav-links ${mobileMenuOpen ? 'mobile-open' : ''}`}>
         <li className={location.pathname === '/' ? 'active' : ''}>
           <Link to="/" onClick={closeMobileMenu}>Home</Link>
@@ -29,17 +28,13 @@ const Navigation = ({ theme, toggleTheme }) => {
           <Link to="/contact" onClick={closeMobileMenu}>Contact</Link>
         </li>
       </ul>
-      
+
       <div className="navbar-controls">
-        <button 
-          onClick={toggleTheme} 
-          className="theme-toggle" 
-          aria-label="Toggle theme"
-        >
+        <button onClick={toggleTheme} className="theme-toggle" aria-label="Toggle theme">
           {theme === 'dark' ? '☀️' : '🌙'}
         </button>
-        
-        <button 
+
+        <button
           className="mobile-menu-toggle"
           onClick={toggleMobileMenu}
           aria-label="Toggle navigation menu"
@@ -54,33 +49,23 @@ const Navigation = ({ theme, toggleTheme }) => {
   );
 };
 
-// App content with navigation context
-const AppContent = () => {
-  const [theme, setTheme] = useState(() => {
-    const savedTheme = localStorage.getItem('theme');
-    return savedTheme || 'dark';
-  });
-  
-  const [isLoading, setIsLoading] = useState(true);
+const AppContent: React.FC = () => {
+  const [theme, setTheme] = useState<string>(() => localStorage.getItem('theme') || 'dark');
+  const [isLoading, setIsLoading] = useState<boolean>(true);
 
   useEffect(() => {
-    // Apply theme and persist to localStorage
     document.body.className = theme;
     localStorage.setItem('theme', theme);
-    
-    // Add smooth page load transition
-    const timer = setTimeout(() => {
-      setIsLoading(false);
-    }, 500);
-    
+
+    const timer = setTimeout(() => setIsLoading(false), 500);
     return () => clearTimeout(timer);
   }, [theme]);
 
   const toggleTheme = () => {
-    setTheme(prevTheme => {
-      const newTheme = prevTheme === 'dark' ? 'light' : 'dark';
-      document.body.className = newTheme;
-      return newTheme;
+    setTheme(prev => {
+      const next = prev === 'dark' ? 'light' : 'dark';
+      document.body.className = next;
+      return next;
     });
   };
 
@@ -91,14 +76,14 @@ const AppContent = () => {
   return (
     <div className="App">
       <Navigation theme={theme} toggleTheme={toggleTheme} />
-      
+
       <main className="content">
         <Routes>
           <Route path="/" element={<Home />} />
           <Route path="/contact" element={<Contact />} />
         </Routes>
       </main>
-      
+
       <footer className="footer">
         <p>&copy; {new Date().getFullYear()} Vitaly Nudelman</p>
       </footer>
@@ -106,7 +91,7 @@ const AppContent = () => {
   );
 };
 
-function App() {
+function App(): JSX.Element {
   return (
     <Router>
       <AppContent />
