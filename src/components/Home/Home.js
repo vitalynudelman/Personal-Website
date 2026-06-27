@@ -36,7 +36,7 @@ function Home() {
   
   // Typed text effect
   const [typedText, setTypedText] = useState('');
-  const fullText = 'Software Developer';
+  const fullText = 'Software Developer / DevOps Engineer';
   
   useEffect(() => {
     if (typedText.length < fullText.length) {
@@ -60,7 +60,7 @@ function Home() {
               <div className="bio-content">
                 <p className="animate-in" style={{ animationDelay: '0.2s' }}>Welcome to My Website!</p>
                 <p className="animate-in" style={{ animationDelay: '0.4s' }}>
-                  My name is Vitaly, and I am a C++ Software Developer with a strong background in DevOps Engineering. I combine programming expertise with experience in CI/CD pipelines and Kubernetes, allowing me to build and deploy efficient solutions across various environments.
+                  Highly motivated and passionate software developer with proven experience implementing software and DevOps solutions. My work has spanned a broad spectrum of tasks — from designing and writing software for embedded, mission-critical real-time systems to creating and optimizing CI/CD pipelines and writing Helm charts for Kubernetes applications.
                 </p>
                 <p className="animate-in" style={{ animationDelay: '0.6s' }}>
                   This website showcases my personal projects and tools—both those created to streamline my team's workflow and others developed for learning and enjoyment.
