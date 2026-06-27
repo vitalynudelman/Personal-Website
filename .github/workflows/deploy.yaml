@@ -128,6 +128,6 @@ jobs:
           script: |
             cd website
             echo "starting deploy script"
-            docker docker compose pull
+            docker compose pull
             docker compose up -d
             echo "Deploy script finished running"
