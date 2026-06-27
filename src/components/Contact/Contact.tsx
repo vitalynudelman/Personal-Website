@@ -1,24 +1,34 @@
 import React, { useState, useEffect, useRef } from 'react';
 import './Contact.css';
 
-function Contact() {
-  const [animateContact, setAnimateContact] = useState(false);
-  const contactRef = useRef(null);
-  
-  // Contact form state
-  const [formData, setFormData] = useState({
+interface FormData {
+  name: string;
+  email: string;
+  message: string;
+}
+
+interface SubmitStatus {
+  submitted: boolean;
+  success: boolean;
+  message: string;
+}
+
+function Contact(): JSX.Element {
+  const [animateContact, setAnimateContact] = useState<boolean>(false);
+  const contactRef = useRef<HTMLDivElement>(null);
+
+  const [formData, setFormData] = useState<FormData>({
     name: '',
     email: '',
     message: ''
   });
-  
-  const [submitStatus, setSubmitStatus] = useState({
+
+  const [submitStatus, setSubmitStatus] = useState<SubmitStatus>({
     submitted: false,
     success: false,
     message: ''
   });
-  
-  // Animation on scroll
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -29,43 +39,40 @@ function Contact() {
       },
       { threshold: 0.1 }
     );
-    
-    if (contactRef.current) {
-      observer.observe(contactRef.current);
+
+    const current = contactRef.current;
+    if (current) {
+      observer.observe(current);
     }
-    
+
     return () => {
-      if (contactRef.current) {
-        observer.unobserve(contactRef.current);
+      if (current) {
+        observer.unobserve(current);
       }
     };
   }, []);
-  
-  // Form handling
-  const handleChange = (e) => {
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
     setFormData(prev => ({ ...prev, [name]: value }));
   };
-  
-  const handleSubmit = (e) => {
+
+  const handleSubmit = (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
-    // Mock form submission - in a real scenario, this would send data to a server
+
     setSubmitStatus({
       submitted: true,
       success: true,
       message: 'Thank you for your message! I will get back to you soon.'
     });
-    
-    // Reset form after successful submission
+
     setFormData({ name: '', email: '', message: '' });
-    
-    // Reset status after 5 seconds
+
     setTimeout(() => {
       setSubmitStatus({ submitted: false, success: false, message: '' });
     }, 5000);
   };
-  
+
   return (
     <div className="Contact" ref={contactRef}>
       <div className={`contact-wrapper ${animateContact ? 'animate' : ''}`}>
@@ -73,10 +80,10 @@ function Contact() {
           <h2 className="section-title">Get In Touch</h2>
           <div className="section-subtitle">Feel free to reach out for collaboration or questions</div>
         </div>
-        
+
         <div className="contact-container">
           <div className="contact-info">
-            
+
             <div className="contact-method">
               <div className="contact-icon">💼</div>
               <div className="contact-details">
@@ -86,7 +93,7 @@ function Contact() {
                 </a>
               </div>
             </div>
-            
+
             <div className="contact-method">
               <div className="contact-icon">💻</div>
               <div className="contact-details">
@@ -96,13 +103,13 @@ function Contact() {
                 </a>
               </div>
             </div>
-            
+
             <div className="resume-download">
               <h3>My Resume</h3>
-              <a 
-                href="resume/resume.pdf" 
-                target="_blank" 
-                rel="noopener noreferrer" 
+              <a
+                href="resume/resume.pdf"
+                target="_blank"
+                rel="noopener noreferrer"
                 download
                 className="download-button"
               >
@@ -111,7 +118,7 @@ function Contact() {
               </a>
             </div>
           </div>
-          
+
           <div className="contact-form-container">
             <h3>Send a Message</h3>
             {submitStatus.submitted ? (
@@ -122,7 +129,7 @@ function Contact() {
               <form className="contact-form" onSubmit={handleSubmit}>
                 <div className="form-group">
                   <label htmlFor="name">Name</label>
-                  <input 
+                  <input
                     type="text"
                     id="name"
                     name="name"
@@ -131,10 +138,10 @@ function Contact() {
                     required
                   />
                 </div>
-                
+
                 <div className="form-group">
                   <label htmlFor="email">Email</label>
-                  <input 
+                  <input
                     type="email"
                     id="email"
                     name="email"
@@ -143,19 +150,19 @@ function Contact() {
                     required
                   />
                 </div>
-                
+
                 <div className="form-group">
                   <label htmlFor="message">Message</label>
-                  <textarea 
+                  <textarea
                     id="message"
                     name="message"
-                    rows="5"
+                    rows={5}
                     value={formData.message}
                     onChange={handleChange}
                     required
                   ></textarea>
                 </div>
-                
+
                 <button type="submit" className="submit-button">
                   Send Message
                 </button>
@@ -163,14 +170,14 @@ function Contact() {
             )}
           </div>
         </div>
-        
+
         <div className="resume-preview">
           <h3>Resume Preview</h3>
           <div className="pdf-container">
-            <iframe 
-              src="resume/resume.pdf" 
+            <iframe
+              src="resume/resume.pdf"
               title="Resume Preview"
-              width="100%" 
+              width="100%"
               height="600px"
             ></iframe>
           </div>

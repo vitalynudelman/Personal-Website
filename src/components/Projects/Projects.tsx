@@ -1,13 +1,21 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './Projects.css';
 
-function Projects() {
-  const [activeProject, setActiveProject] = useState(null);
-  const [animateProjects, setAnimateProjects] = useState(false);
-  const projectsRef = useRef(null);
-  
-  // Enhanced project data
-  const projects = [
+interface Project {
+  id: number;
+  title: string;
+  description: string;
+  githubLink: string;
+  tags: string[];
+  icon: string;
+}
+
+function Projects(): JSX.Element {
+  const [activeProject, setActiveProject] = useState<number | null>(null);
+  const [animateProjects, setAnimateProjects] = useState<boolean>(false);
+  const projectsRef = useRef<HTMLElement>(null);
+
+  const projects: Project[] = [
     {
       id: 1,
       title: 'Complete CICD Pipeline',
@@ -33,8 +41,7 @@ function Projects() {
       icon: '🏗️'
     }
   ];
-  
-  // Animation on scroll
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -45,25 +52,21 @@ function Projects() {
       },
       { threshold: 0.1 }
     );
-    
-    if (projectsRef.current) {
-      observer.observe(projectsRef.current);
+
+    const current = projectsRef.current;
+    if (current) {
+      observer.observe(current);
     }
-    
+
     return () => {
-      if (projectsRef.current) {
-        observer.unobserve(projectsRef.current);
+      if (current) {
+        observer.unobserve(current);
       }
     };
   }, []);
-  
-  // Handle card expansion
-  const toggleProject = (id) => {
-    if (activeProject === id) {
-      setActiveProject(null);
-    } else {
-      setActiveProject(id);
-    }
+
+  const toggleProject = (id: number) => {
+    setActiveProject(prev => prev === id ? null : id);
   };
 
   return (
@@ -72,10 +75,10 @@ function Projects() {
         <h2 className="section-title">My Projects</h2>
         <div className="section-subtitle">A collection of my work and personal projects</div>
       </div>
-      
+
       <div className={`project-list ${animateProjects ? 'animate' : ''}`}>
         {projects.map((project, index) => (
-          <div 
+          <div
             className={`project-card ${activeProject === project.id ? 'active' : ''}`}
             key={project.id}
             style={{ animationDelay: `${0.1 * index}s` }}
@@ -83,20 +86,20 @@ function Projects() {
           >
             <div className="project-icon">{project.icon}</div>
             <h3 className="project-title">{project.title}</h3>
-            
+
             <div className="project-tags">
               {project.tags.map((tag, tagIndex) => (
                 <span className="project-tag" key={tagIndex}>{tag}</span>
               ))}
             </div>
-            
+
             <p className="project-description">{project.description}</p>
-            
+
             <div className="project-actions">
-              <a 
-                href={project.githubLink} 
-                className="project-link" 
-                target="_blank" 
+              <a
+                href={project.githubLink}
+                className="project-link"
+                target="_blank"
                 rel="noopener noreferrer"
                 onClick={(e) => e.stopPropagation()}
               >

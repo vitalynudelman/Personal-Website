@@ -1,13 +1,23 @@
 import React, { useState, useRef, useEffect } from 'react';
 import './Skills.css';
 
-function Skills() {
-  const [activeCategory, setActiveCategory] = useState('all');
-  const [animateSkills, setAnimateSkills] = useState(false);
-  const skillsRef = useRef(null);
-  
-  // Group skills by category
-  const skillsData = [
+interface Skill {
+  name: string;
+  icon: string;
+  category: string;
+}
+
+interface Category {
+  id: string;
+  name: string;
+}
+
+function Skills(): JSX.Element {
+  const [activeCategory, setActiveCategory] = useState<string>('all');
+  const [animateSkills, setAnimateSkills] = useState<boolean>(false);
+  const skillsRef = useRef<HTMLElement>(null);
+
+  const skillsData: Skill[] = [
     { name: 'Linux', icon: 'skills/linux-logo.png', category: 'os' },
     { name: 'BASH', icon: 'skills/bash-logo.jpg', category: 'programming' },
     { name: 'Python', icon: 'skills/python-logo.png', category: 'programming' },
@@ -26,9 +36,8 @@ function Skills() {
     { name: 'AWS', icon: 'skills/aws-logo-dark.png', category: 'cloud' },
     { name: 'Terraform', icon: 'skills/terraform-logo.png', category: 'iac' },
   ];
-  
-  // Define categories with human-readable names
-  const categories = [
+
+  const categories: Category[] = [
     { id: 'all', name: 'All Skills' },
     { id: 'programming', name: 'Programming' },
     { id: 'container', name: 'Containerization' },
@@ -40,13 +49,11 @@ function Skills() {
     { id: 'os', name: 'Operating Systems' },
     { id: 'tools', name: 'Tools' },
   ];
-  
-  // Filter skills based on active category
-  const filteredSkills = activeCategory === 'all' 
-    ? skillsData 
+
+  const filteredSkills: Skill[] = activeCategory === 'all'
+    ? skillsData
     : skillsData.filter(skill => skill.category === activeCategory);
-    
-  // Animation when scrolled into view
+
   useEffect(() => {
     const observer = new IntersectionObserver(
       ([entry]) => {
@@ -57,14 +64,15 @@ function Skills() {
       },
       { threshold: 0.2 }
     );
-    
-    if (skillsRef.current) {
-      observer.observe(skillsRef.current);
+
+    const current = skillsRef.current;
+    if (current) {
+      observer.observe(current);
     }
-    
+
     return () => {
-      if (skillsRef.current) {
-        observer.unobserve(skillsRef.current);
+      if (current) {
+        observer.unobserve(current);
       }
     };
   }, []);
@@ -75,7 +83,7 @@ function Skills() {
         <h2 className="section-title">Skills & Technologies</h2>
         <div className="section-subtitle">Technical proficiencies I've developed over the years</div>
       </div>
-      
+
       <div className="skill-categories">
         {categories.map(category => (
           <button
@@ -87,11 +95,11 @@ function Skills() {
           </button>
         ))}
       </div>
-      
+
       <div className={`skill-list ${animateSkills ? 'animate' : ''}`}>
         {filteredSkills.map((skill, index) => (
-          <div 
-            className="skill" 
+          <div
+            className="skill"
             key={index}
             style={{ animationDelay: `${0.05 * index}s` }}
           >
