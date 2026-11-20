@@ -1,0 +1,18 @@
+.section {
+  padding-block: var(--space-8);
+  border-top: 1px solid var(--border);
+}
+
+.header {
+  margin-bottom: var(--space-6);
+}
+
+.title {
+  font-size: var(--text-2xl);
+}
+
+.subtitle {
+  margin-top: var(--space-2);
+  color: var(--text-muted);
+  font-size: var(--text-base);
+}

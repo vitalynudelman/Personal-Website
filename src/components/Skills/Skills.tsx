@@ -1,117 +1,44 @@
-import React, { useState, useRef, useEffect } from 'react';
-import './Skills.css';
+import { useMemo, useState } from 'react';
+import { skillCategories, skills } from '../../content/skills';
+import Section from '../Section/Section';
+import styles from './Skills.module.css';
 
-interface Skill {
-  name: string;
-  icon: string;
-  category: string;
-}
+const ALL = 'all';
 
-interface Category {
-  id: string;
-  name: string;
-}
+export default function Skills() {
+  const [active, setActive] = useState<string>(ALL);
 
-function Skills(): JSX.Element {
-  const [activeCategory, setActiveCategory] = useState<string>('all');
-  const [animateSkills, setAnimateSkills] = useState<boolean>(false);
-  const skillsRef = useRef<HTMLElement>(null);
-
-  const skillsData: Skill[] = [
-    { name: 'Linux', icon: 'skills/linux-logo.png', category: 'os' },
-    { name: 'BASH', icon: 'skills/bash-logo.jpg', category: 'programming' },
-    { name: 'Python', icon: 'skills/python-logo.png', category: 'programming' },
-    { name: 'C++', icon: 'skills/cpp-logo.png', category: 'programming' },
-    { name: 'Git', icon: 'skills/git-logo.png', category: 'tools' },
-    { name: 'Docker', icon: 'skills/docker-logo.png', category: 'container' },
-    { name: 'Kubernetes', icon: 'skills/k8s-logo.png', category: 'container' },
-    { name: 'OpenShift', icon: 'skills/ocp-logo.png', category: 'container' },
-    { name: 'Helm', icon: 'skills/helm-logo.png', category: 'container' },
-    { name: 'Artifactory', icon: 'skills/artifactory-logo.png', category: 'cicd' },
-    { name: 'Jenkins', icon: 'skills/jenkins-logo.png', category: 'cicd' },
-    { name: 'Ansible', icon: 'skills/ansible-logo.png', category: 'automation' },
-    { name: 'Elasticsearch', icon: 'skills/elasticsearch-logo.png', category: 'monitoring' },
-    { name: 'Prometheus', icon: 'skills/prometheus-logo.png', category: 'monitoring' },
-    { name: 'Grafana', icon: 'skills/grafana-logo.png', category: 'monitoring' },
-    { name: 'AWS', icon: 'skills/aws-logo-dark.png', category: 'cloud' },
-    { name: 'Terraform', icon: 'skills/terraform-logo.png', category: 'iac' },
-  ];
-
-  const categories: Category[] = [
-    { id: 'all', name: 'All Skills' },
-    { id: 'programming', name: 'Programming' },
-    { id: 'container', name: 'Containerization' },
-    { id: 'cicd', name: 'CI/CD' },
-    { id: 'monitoring', name: 'Monitoring' },
-    { id: 'cloud', name: 'Cloud' },
-    { id: 'automation', name: 'Automation' },
-    { id: 'iac', name: 'Infrastructure as Code' },
-    { id: 'os', name: 'Operating Systems' },
-    { id: 'tools', name: 'Tools' },
-  ];
-
-  const filteredSkills: Skill[] = activeCategory === 'all'
-    ? skillsData
-    : skillsData.filter(skill => skill.category === activeCategory);
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setAnimateSkills(true);
-          observer.unobserve(entry.target);
-        }
-      },
-      { threshold: 0.2 }
-    );
-
-    const current = skillsRef.current;
-    if (current) {
-      observer.observe(current);
-    }
-
-    return () => {
-      if (current) {
-        observer.unobserve(current);
-      }
-    };
-  }, []);
+  const filters = useMemo(() => [{ id: ALL, name: 'All Skills' }, ...skillCategories], []);
+  const visible = active === ALL ? skills : skills.filter((skill) => skill.category === active);
 
   return (
-    <section className="Skills" ref={skillsRef}>
-      <div className="section-header">
-        <h2 className="section-title">Skills & Technologies</h2>
-        <div className="section-subtitle">Technical proficiencies I've developed over the years</div>
-      </div>
-
-      <div className="skill-categories">
-        {categories.map(category => (
+    <Section
+      id="skills"
+      title="Skills & Technologies"
+      subtitle="Technical proficiencies I've developed over the years"
+    >
+      <div className={styles.filters} role="group" aria-label="Filter skills by category">
+        {filters.map((filter) => (
           <button
-            key={category.id}
-            className={`category-button ${activeCategory === category.id ? 'active' : ''}`}
-            onClick={() => setActiveCategory(category.id)}
+            key={filter.id}
+            type="button"
+            className={styles.filter}
+            aria-pressed={active === filter.id}
+            onClick={() => setActive(filter.id)}
           >
-            {category.name}
+            {filter.name}
           </button>
         ))}
       </div>
 
-      <div className={`skill-list ${animateSkills ? 'animate' : ''}`}>
-        {filteredSkills.map((skill, index) => (
-          <div
-            className="skill"
-            key={index}
-            style={{ animationDelay: `${0.05 * index}s` }}
-          >
-            <div className="skill-icon">
-              <img src={skill.icon} alt={skill.name} />
-            </div>
-            <div className="skill-name">{skill.name}</div>
-          </div>
+      <ul className={styles.grid}>
+        {visible.map((skill) => (
+          <li key={skill.name} className={styles.skill}>
+            <img src={skill.icon} alt="" width={40} height={40} loading="lazy" />
+            <span>{skill.name}</span>
+          </li>
         ))}
-      </div>
-    </section>
+      </ul>
+    </Section>
   );
 }
-
-export default Skills;
