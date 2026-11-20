@@ -22,12 +22,20 @@
   flex-shrink: 0;
 }
 
+/* Flex items default to min-width:auto and will not shrink below their own
+   text; without this a long name or issuer escapes the card (see ISC-29). */
+.details {
+  min-width: 0;
+}
+
 .name {
   font-size: var(--text-lg);
+  overflow-wrap: anywhere;
 }
 
 .meta {
   display: flex;
+  min-width: 0;
   flex-wrap: wrap;
   gap: var(--space-2);
   margin-top: var(--space-1);

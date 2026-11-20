@@ -4,9 +4,9 @@ task: "Modernize and restructure Vitaly's personal website"
 slug: 20261120-125743_personal-website-refactor
 project: Personal-Website
 phase: climbing
-progress: 22/28
+progress: 23/29
 started: 2026-11-20T10:57:43Z
-updated: 2026-11-20T11:38:00Z
+updated: 2026-11-20T17:30:00Z
 principal_stated_goal: "I would like to refactor my personal website that is right now in the following directory. /Users/vitalik/projects/Personal-Website. I would like you to make it more modern and better structured."
 principal_stated_goal_source: prompt
 principal_stated_goal_signal: 4
@@ -133,6 +133,7 @@ Reach: / → heading "Vitaly Nudelman" ; / → button "Toggle theme"
 - [x] ISC-20: Anti: no hard-coded hex or `rgb()` colour literal appears in any file under `src/` other than `tokens.css`.
 - [ ] ISC-21: `[DEFERRED-VERIFY]` The home page renders with no horizontal overflow at 390px, 768px and 1440px.
 - [ ] ISC-22: `[DEFERRED-VERIFY]` Both themes render correctly at 1440px, judged on viewed screenshots against the refreshed design.
+- [x] ISC-29: Anti: every flex row holding a variable-length label declares `min-width: 0` on that label, so no text can escape its own container however long it grows.
 
 ### F5 · Resume delivery
 
@@ -177,6 +178,7 @@ Why: shipping stays one push, and the image builds without re-installing depende
 | ISC-20 | bash | no colour literals outside the token file | 0 matches | `bash scripts/check-no-hex.sh` | derived: design-system |  | integrity |
 | ISC-21 | screenshot | no horizontal overflow at three widths | scrollWidth <= clientWidth at 390, 768, 1440 | Interceptor viewport sweep | derived: responsive |  | integrity |
 | ISC-22 | eval | both themes read as a current, coherent refresh of the same site | judged pass | viewed screenshots at 1440px, light and dark | derived: visual-refresh |  | integrity |
+| ISC-29 | bash | every variable-length flex label can shrink inside its container | 0 unguarded rows | `bash scripts/check-flex-labels.sh` | derived: containment |  | liveness |
 | ISC-23 | curl | resume path serves a PDF from the built site | 200 + application/pdf | `curl -sfI http://localhost:4173/resume/resume.pdf \| grep -qi 'content-type: application/pdf'` | literal |  | liveness |
 | ISC-24 | bash | served PDF matches the current full-cycle resume | identical sha256 | `bash scripts/check-resume-identity.sh` | derived: resume-currency |  | integrity |
 | ISC-25 | bash | container image builds and serves the site | 200 + text/html | `bash scripts/docker-smoke.sh` | literal |  | build |
@@ -214,6 +216,8 @@ teardown: bash scripts/stop-dev.sh
 - 2026-11-20 13:38: refined: ISC-9 was compound, asserting both the React version and a clean console. Split, with the version staying ISC-9 and the console claim becoming ISC-28, which is browser-bound and therefore deferred. The original wording would have let a deterministic half close the judged half.
 - 2026-11-20 17:15: The in-page resume preview iframe is removed at the principal's request: it rendered poorly and the download link already carries the conversion. ISC-23 and F5's `Reach:` line drop their iframe clause.
 - 2026-11-20 17:15: Skill chips overflowed on the longest names ("Elasticsearch", "Prometheus"), reported by the principal from the running site. Cause: a flex item defaults to `min-width: auto` and will not shrink below its own text. Fixed at both ends, a wider grid track and a shrinkable, wrapping label, so length alone cannot break a chip again.
+- 2026-11-20 17:30: 🧹 CLASS-SWEEP: unguarded flex labels — the reported chip overflow was one instance of a class, not a one-off. `scripts/check-flex-labels.sh` enumerated the siblings and found two more the principal had not hit yet: the certification card's details column and the contact card's link column, which holds an unbroken URL. 3 found, 3 fixed, 0 tombstoned. ISC-29 now blocks the class rather than the instance.
+- 2026-11-20 17:30: learned: no criterion in the ISA could have caught the overflow, because ISC-21 measures page-level horizontal scroll and this was content escaping its own box while the page stayed within its width. The principal found it, which is the gap ISC-29 closes. The deferred browser rows would not have caught it either without an explicit containment check.
 - 2026-11-20 13:38: refined: ISC-12's row moved from `manual` to `bash`. A server render of the real components through `scripts/check-content-parity.sh` makes content parity deterministic; it is evidence about content only and is never cited for layout or appearance.
 
 ## Verification
@@ -240,6 +244,7 @@ teardown: bash scripts/stop-dev.sh
 - ISC-25: `scripts/docker-smoke.sh` — image builds in 8s, `/` returns text/html, resume returns application/pdf
 - ISC-26: `scripts/check-docker-layers.sh` — manifest (7) → install (8) → source (10)
 - ISC-27: `scripts/check-deploy-contract.sh` — no tag, login, build-push, PR or deploy line differs from origin/main
+- ISC-29: `scripts/check-flex-labels.sh` — 3/3 guarded, after the sweep found two unguarded siblings beyond the reported one
 
 ## Not yet specified
 

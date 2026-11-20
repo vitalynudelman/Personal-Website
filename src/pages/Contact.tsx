@@ -14,7 +14,7 @@ export default function Contact() {
             <span className={styles.icon} aria-hidden="true">
               {link.icon}
             </span>
-            <span>
+            <span className={styles.details}>
               <span className={styles.label}>{link.label}</span>
               <a href={link.href} target="_blank" rel="noopener noreferrer">
                 {link.value}

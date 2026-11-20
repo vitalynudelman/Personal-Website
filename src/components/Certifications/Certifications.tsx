@@ -20,7 +20,7 @@ export default function Certifications() {
               loading="lazy"
               className={styles.badge}
             />
-            <div>
+            <div className={styles.details}>
               <h3 className={styles.name}>{certification.name}</h3>
               <p className={styles.meta}>
                 <span>{certification.issuer}</span>

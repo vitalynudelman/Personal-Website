@@ -14,6 +14,16 @@
   background: var(--surface);
 }
 
+/* Same guard as the skill chips: the link column holds an unbroken URL
+   that would otherwise push out of the card on a narrow screen (ISC-29). */
+.details {
+  min-width: 0;
+}
+
+.details a {
+  overflow-wrap: anywhere;
+}
+
 .icon {
   font-size: var(--text-xl);
   line-height: 1;
