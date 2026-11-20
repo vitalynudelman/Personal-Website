@@ -137,9 +137,9 @@ Reach: / → heading "Vitaly Nudelman" ; / → button "Toggle theme"
 ### F5 · Resume delivery
 
 Why: the download is the site's one conversion, and it currently 404s.
-Reach: /contact → link "Download Resume" ; /contact → iframe "Resume Preview"
+Reach: /contact → link "Download Resume"
 
-- [x] ISC-23: The path the download link and the preview iframe point at returns HTTP 200 with `application/pdf` from the built site.
+- [x] ISC-23: The path the download link points at returns HTTP 200 with `application/pdf` from the built site.
 - [x] ISC-24: The served PDF is byte-identical to the current full-cycle resume PDF in the Resume folder.
 
 ### F6 · Deploy pipeline
@@ -212,6 +212,8 @@ teardown: bash scripts/stop-dev.sh
 - 2026-11-20 13:20: Project-card click-to-expand replaced by making the whole card a link to its repository. The old handler fought the inner anchor and needed `stopPropagation`; one link target is both simpler and reachable by keyboard.
 - 2026-11-20 13:35: ❌ Interceptor is not installed on this machine (`PreflightIsolation FAIL: interceptor not found on PATH`), and no other browser automation is connected to the session. Per the verification doctrine an unavailable verifier defers rather than substitutes, so ISC-5, ISC-15, ISC-16, ISC-21, ISC-22 and ISC-28 carry `[DEFERRED-VERIFY]`. No curl or static read was dressed up as visual evidence. Follow-up: install Interceptor (`Skill("Interceptor")` Update intent), then run the five browser rows.
 - 2026-11-20 13:38: refined: ISC-9 was compound, asserting both the React version and a clean console. Split, with the version staying ISC-9 and the console claim becoming ISC-28, which is browser-bound and therefore deferred. The original wording would have let a deterministic half close the judged half.
+- 2026-11-20 17:15: The in-page resume preview iframe is removed at the principal's request: it rendered poorly and the download link already carries the conversion. ISC-23 and F5's `Reach:` line drop their iframe clause.
+- 2026-11-20 17:15: Skill chips overflowed on the longest names ("Elasticsearch", "Prometheus"), reported by the principal from the running site. Cause: a flex item defaults to `min-width: auto` and will not shrink below its own text. Fixed at both ends, a wider grid track and a shrinkable, wrapping label, so length alone cannot break a chip again.
 - 2026-11-20 13:38: refined: ISC-12's row moved from `manual` to `bash`. A server render of the real components through `scripts/check-content-parity.sh` makes content parity deterministic; it is evidence about content only and is never cited for layout or appearance.
 
 ## Verification

@@ -31,7 +31,8 @@
 
 .grid {
   display: grid;
-  grid-template-columns: repeat(auto-fill, minmax(8.5rem, 1fr));
+  /* Wide enough for the longest skill name ("Elasticsearch") at this size. */
+  grid-template-columns: repeat(auto-fill, minmax(11rem, 1fr));
   gap: var(--space-3);
 }
 
@@ -60,4 +61,14 @@
   height: 1.75rem;
   object-fit: contain;
   flex-shrink: 0;
+}
+
+/*
+ * A flex item defaults to min-width:auto and so refuses to shrink below its
+ * own text, which pushed long names out of the chip. Let the label shrink and
+ * wrap instead, so no future skill name can escape however long it is.
+ */
+.skill span {
+  min-width: 0;
+  overflow-wrap: anywhere;
 }

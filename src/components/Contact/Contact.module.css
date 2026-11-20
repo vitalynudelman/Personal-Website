@@ -1,13 +1,7 @@
-.layout {
-  display: grid;
-  grid-template-columns: minmax(0, 1fr) minmax(0, 1.6fr);
-  gap: var(--space-6);
-  align-items: start;
-}
-
 .links {
   display: grid;
   gap: var(--space-4);
+  max-width: 32rem;
 }
 
 .link {
@@ -58,23 +52,4 @@
 .download:hover {
   background: var(--accent-hover);
   color: var(--accent-contrast);
-}
-
-.preview iframe {
-  width: 100%;
-  height: min(70vh, 40rem);
-  margin-top: var(--space-3);
-  border: 1px solid var(--border);
-  border-radius: var(--radius-md);
-  background: var(--surface);
-}
-
-@media (max-width: 54rem) {
-  .layout {
-    grid-template-columns: 1fr;
-  }
-
-  .preview iframe {
-    height: 30rem;
-  }
 }

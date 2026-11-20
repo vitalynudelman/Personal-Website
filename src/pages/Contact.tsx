@@ -8,36 +8,29 @@ export default function Contact() {
       title="Get In Touch"
       subtitle="Feel free to reach out on LinkedIn for collaboration or questions"
     >
-      <div className={styles.layout}>
-        <ul className={styles.links}>
-          {profileLinks.map((link) => (
-            <li key={link.label} className={styles.link}>
-              <span className={styles.icon} aria-hidden="true">
-                {link.icon}
-              </span>
-              <span>
-                <span className={styles.label}>{link.label}</span>
-                <a href={link.href} target="_blank" rel="noopener noreferrer">
-                  {link.value}
-                </a>
-              </span>
-            </li>
-          ))}
-
-          <li className={styles.resume}>
-            <span className={styles.label}>My Resume</span>
-            <a className={styles.download} href={profile.resumePath} download>
-              <DownloadIcon />
-              Download Resume
-            </a>
+      <ul className={styles.links}>
+        {profileLinks.map((link) => (
+          <li key={link.label} className={styles.link}>
+            <span className={styles.icon} aria-hidden="true">
+              {link.icon}
+            </span>
+            <span>
+              <span className={styles.label}>{link.label}</span>
+              <a href={link.href} target="_blank" rel="noopener noreferrer">
+                {link.value}
+              </a>
+            </span>
           </li>
-        </ul>
+        ))}
 
-        <figure className={styles.preview}>
-          <figcaption className={styles.label}>Resume Preview</figcaption>
-          <iframe src={profile.resumePath} title="Resume Preview" loading="lazy" />
-        </figure>
-      </div>
+        <li className={styles.resume}>
+          <span className={styles.label}>My Resume</span>
+          <a className={styles.download} href={profile.resumePath} download>
+            <DownloadIcon />
+            Download Resume
+          </a>
+        </li>
+      </ul>
     </Section>
   );
 }
