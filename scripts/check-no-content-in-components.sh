@@ -3,7 +3,7 @@
 set -euo pipefail
 cd "$(dirname "$0")/.."
 # One representative literal per content type, taken from the captured baseline.
-needles=('Kubernetes' 'Elasticdump GUI' 'AWS Certified Solutions Architect' 'complete-pipeline-jenkins')
+needles=('Kubernetes' 'Integration Specialist' 'AWS Certified Solutions Architect' 'Israel Aerospace Industries')
 fail=0
 for needle in "${needles[@]}"; do
   if hits=$(grep -rln -- "$needle" src/components src/pages 2>/dev/null); then

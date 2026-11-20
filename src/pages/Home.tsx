@@ -1,15 +1,15 @@
 import Hero from '../components/Hero/Hero';
+import Experience from '../components/Experience/Experience';
 import Skills from '../components/Skills/Skills';
 import Certifications from '../components/Certifications/Certifications';
-import Projects from '../components/Projects/Projects';
 
 export default function Home() {
   return (
     <>
       <Hero />
+      <Experience />
       <Skills />
       <Certifications />
-      <Projects />
     </>
   );
 }

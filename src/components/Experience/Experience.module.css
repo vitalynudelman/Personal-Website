@@ -1,0 +1,76 @@
+.timeline {
+  display: grid;
+  gap: var(--space-4);
+}
+
+.role {
+  position: relative;
+  padding: var(--space-5);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  background: var(--surface);
+  box-shadow: var(--shadow-sm);
+}
+
+.heading {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  justify-content: space-between;
+  gap: var(--space-2) var(--space-4);
+}
+
+/* Flex item: must shrink below its own text, or a long title escapes (ISC-29). */
+.who {
+  min-width: 0;
+}
+
+.title {
+  font-size: var(--text-lg);
+  overflow-wrap: anywhere;
+}
+
+.company {
+  margin-top: var(--space-1);
+  color: var(--accent);
+  font-size: var(--text-sm);
+  font-weight: 600;
+  overflow-wrap: anywhere;
+}
+
+.location {
+  color: var(--text-faint);
+  font-weight: 450;
+}
+
+.period {
+  flex-shrink: 0;
+  color: var(--text-faint);
+  font-family: var(--font-mono);
+  font-size: var(--text-xs);
+  white-space: nowrap;
+}
+
+.bullets {
+  display: grid;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+  color: var(--text-muted);
+  font-size: var(--text-sm);
+}
+
+.bullets li {
+  position: relative;
+  padding-left: var(--space-5);
+}
+
+.bullets li::before {
+  content: '';
+  position: absolute;
+  left: var(--space-2);
+  top: 0.6em;
+  width: 5px;
+  height: 5px;
+  border-radius: var(--radius-full);
+  background: var(--border-strong);
+}

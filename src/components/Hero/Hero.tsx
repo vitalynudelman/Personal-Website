@@ -17,8 +17,8 @@ export default function Hero() {
         </div>
 
         <div className={styles.actions}>
-          <a className={styles.primary} href="#projects">
-            View Projects
+          <a className={styles.primary} href="#experience">
+            View Experience
           </a>
           <a className={styles.secondary} href="#skills">
             My Skills

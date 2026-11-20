@@ -4,9 +4,9 @@ task: "Modernize and restructure Vitaly's personal website"
 slug: 20261120-125743_personal-website-refactor
 project: Personal-Website
 phase: climbing
-progress: 23/29
+progress: 25/30
 started: 2026-11-20T10:57:43Z
-updated: 2026-11-20T17:30:00Z
+updated: 2026-11-20T17:50:00Z
 principal_stated_goal: "I would like to refactor my personal website that is right now in the following directory. /Users/vitalik/projects/Personal-Website. I would like you to make it more modern and better structured."
 principal_stated_goal_source: prompt
 principal_stated_goal_signal: 4
@@ -55,14 +55,14 @@ Vitaly opens the repo six months from now to add a project. He edits one array i
 
 ## Out of Scope
 
-- **No new sections or content.** The same five areas in the same order; what the site says is unchanged by this work.
-- **No redesign of the information architecture.** Hero, skills, certifications, projects, contact stay as they are.
+- **No redesign of the visual language.** The refreshed look stays; sections may come and go on the principal's word, but the token system and component shapes do not get rethought again.
 - **No framework migration.** React stays; this is not a move to Next.js, Astro or Remix.
 - **No CMS or headless backend.** Content stays in the repo as typed modules.
 - **No new runtime dependencies for styling.** Plain CSS with tokens and CSS Modules — no Tailwind, no CSS-in-JS.
 - **No change to the deploy contract.** Same registry, same image tags, same SSH deploy step, same nginx config.
 - **No analytics, tracking or third-party embeds.**
 - **No resume content changes.** The site serves whatever the current PDF is; editing the CV is separate work.
+- **No invented facts.** Every claim on the site traces to the principal's own resume or his words in conversation; nothing is embellished to fill a section.
 
 ## Principles
 
@@ -107,11 +107,12 @@ Why: the project runs on tooling that is still maintained, so builds are fast an
 ### F2 · Content as data
 
 Why: Vitaly changes what the site says by editing data, never by editing a component.
-Reach: /#skills → list "Skills" ; /#projects → list "Projects" ; /#certifications → list "Certifications"
+Reach: /#skills → list "Skills" ; /#experience → list "Experience" ; /#certifications → list "Certifications"
 
-- [x] ISC-10: `src/content/skills.ts`, `src/content/projects.ts` and `src/content/certifications.ts` each export a typed array and its item interface.
-- [x] ISC-11: Anti: no skill, project or certification literal appears in any `src/components/**/*.tsx` file.
-- [x] ISC-12: Every skill, project and certification visible on the site before the refactor is still visible after it, same names, same order.
+- [x] ISC-10: `src/content/skills.ts`, `src/content/experience.ts` and `src/content/certifications.ts` each export a typed array and its item interface.
+- [x] ISC-11: Anti: no skill, role or certification literal appears in any `src/components/**/*.tsx` file.
+- [x] ISC-12: The site's rendered content matches the intended content set in `.harness/baseline.txt` exactly, in order, so no item is silently lost by a refactor.
+- [x] ISC-30: Every role, date range and bullet in the Experience section is traceable to the current full-cycle resume PDF the site serves.
 
 ### F3 · Shared behaviour
 
@@ -167,7 +168,7 @@ Why: shipping stays one push, and the image builds without re-installing depende
 | ISC-28 | screenshot | the app mounts with no console errors | 0 errors | Interceptor console read on load | derived: clean-mount |  | integrity |
 | ISC-10 | bash | content modules export typed arrays | 3 files present with exports | `bash scripts/check-content-modules.sh` | derived: content-as-data |  | integrity |
 | ISC-11 | bash | no content literals remain in components | 0 matches | `bash scripts/check-no-content-in-components.sh` | derived: content-as-data |  | integrity |
-| ISC-12 | bash | every pre-refactor skill, project and certification still renders, same names and order | exact set match | `bash scripts/check-content-parity.sh` | derived: parity |  | integrity |
+| ISC-12 | bash | the rendered page matches the intended content set, in order | exact set match | `bash scripts/check-content-parity.sh` | derived: parity |  | integrity |
 | ISC-13 | bash | exactly one IntersectionObserver in the source | 1 match | `test "$(grep -rc 'new IntersectionObserver' src \| awk -F: '{s+=$2} END {print s}')" = 1` | derived: one-implementation |  | integrity |
 | ISC-14 | bash | theme is applied by an inline script before the bundle | script precedes module script | `bash scripts/check-theme-preload.sh` | derived: no-flash |  | integrity |
 | ISC-15 | screenshot | first visit with no stored preference follows the OS scheme | matches emulated scheme | Interceptor with `prefers-color-scheme` emulation, storage cleared | derived: no-flash |  | integrity |
@@ -178,6 +179,7 @@ Why: shipping stays one push, and the image builds without re-installing depende
 | ISC-20 | bash | no colour literals outside the token file | 0 matches | `bash scripts/check-no-hex.sh` | derived: design-system |  | integrity |
 | ISC-21 | screenshot | no horizontal overflow at three widths | scrollWidth <= clientWidth at 390, 768, 1440 | Interceptor viewport sweep | derived: responsive |  | integrity |
 | ISC-22 | eval | both themes read as a current, coherent refresh of the same site | judged pass | viewed screenshots at 1440px, light and dark | derived: visual-refresh |  | integrity |
+| ISC-30 | bash | every Experience claim appears in the served CV | 0 untraceable | `bash scripts/check-experience-traceable.sh` | derived: one-story |  | integrity |
 | ISC-29 | bash | every variable-length flex label can shrink inside its container | 0 unguarded rows | `bash scripts/check-flex-labels.sh` | derived: containment |  | liveness |
 | ISC-23 | curl | resume path serves a PDF from the built site | 200 + application/pdf | `curl -sfI http://localhost:4173/resume/resume.pdf \| grep -qi 'content-type: application/pdf'` | literal |  | liveness |
 | ISC-24 | bash | served PDF matches the current full-cycle resume | identical sha256 | `bash scripts/check-resume-identity.sh` | derived: resume-currency |  | integrity |
@@ -216,6 +218,9 @@ teardown: bash scripts/stop-dev.sh
 - 2026-11-20 13:38: refined: ISC-9 was compound, asserting both the React version and a clean console. Split, with the version staying ISC-9 and the console claim becoming ISC-28, which is browser-bound and therefore deferred. The original wording would have let a deterministic half close the judged half.
 - 2026-11-20 17:15: The in-page resume preview iframe is removed at the principal's request: it rendered poorly and the download link already carries the conversion. ISC-23 and F5's `Reach:` line drop their iframe clause.
 - 2026-11-20 17:15: Skill chips overflowed on the longest names ("Elasticsearch", "Prometheus"), reported by the principal from the running site. Cause: a flex item defaults to `min-width: auto` and will not shrink below its own text. Fixed at both ends, a wider grid track and a shrinkable, wrapping label, so length alone cannot break a chip again.
+- 2026-11-20 17:45: The Projects section is removed at the principal's request, and he opened content editing to what this conversation established. The three projects were course and practice work; the site now carries his actual roles instead, drawn from the full-cycle resume this same session refined. Out of Scope's "no new sections or content" line is retired, replaced by a no-invented-facts rule, since the original ban was a scope guard the principal has now lifted.
+- 2026-11-20 17:45: refined: ISC-12 no longer means "the same items as before the refactor". The principal deliberately changed the content set, so the criterion now checks the rendered site against an intended baseline that the content modules and the baseline file both describe. Without this the parity check would have failed for the right reason and told us the wrong thing.
+- 2026-11-20 17:45: Experience bullets are carried over verbatim from the resume rather than rewritten for the web, so the two surfaces cannot drift apart and a recruiter reading both sees one story. ISC-30 holds that line.
 - 2026-11-20 17:30: 🧹 CLASS-SWEEP: unguarded flex labels — the reported chip overflow was one instance of a class, not a one-off. `scripts/check-flex-labels.sh` enumerated the siblings and found two more the principal had not hit yet: the certification card's details column and the contact card's link column, which holds an unbroken URL. 3 found, 3 fixed, 0 tombstoned. ISC-29 now blocks the class rather than the instance.
 - 2026-11-20 17:30: learned: no criterion in the ISA could have caught the overflow, because ISC-21 measures page-level horizontal scroll and this was content escaping its own box while the page stayed within its width. The principal found it, which is the gap ISC-29 closes. The deferred browser rows would not have caught it either without an explicit containment check.
 - 2026-11-20 13:38: refined: ISC-12's row moved from `manual` to `bash`. A server render of the real components through `scripts/check-content-parity.sh` makes content parity deterministic; it is evidence about content only and is never cited for layout or appearance.
@@ -232,7 +237,8 @@ teardown: bash scripts/stop-dev.sh
 - ISC-9: `require('react/package.json').version` — 19.3.1; react-dom 19.3.1
 - ISC-10: `scripts/check-content-modules.sh` — three modules each export their typed array
 - ISC-11: `scripts/check-no-content-in-components.sh` — 0 content literals under src/components, src/pages
-- ISC-12: `scripts/check-content-parity.sh` — 22/22 baseline items render, each section in its original order
+- ISC-12: `scripts/check-content-parity.sh` — 22/22 intended items render (3 roles, 17 skills, 2 certifications), each section in order
+- ISC-30: `scripts/check-experience-traceable.sh` — 19/19 role fields and bullets found verbatim in the served CV
 - ISC-13: `grep -rc 'new IntersectionObserver' src` — 1, in `src/hooks/useReveal.ts`
 - ISC-14: `scripts/check-theme-preload.sh` — theme script at line 35, module bundle at line 45
 - ISC-17: `grep setTimeout src/App.tsx src/main.tsx src/components/Nav` — 0 matches

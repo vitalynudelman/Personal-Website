@@ -11,6 +11,6 @@ check() {
   echo "PASS: $file exports $sym: ${iface}[]"
 }
 check skills skills Skill
-check projects projects Project
+check experience experience Role
 check certifications certifications Certification
 exit $fail

@@ -5,11 +5,13 @@ rendered = pathlib.Path('.harness/rendered.html').read_text()
 baseline = [l.split('\t') for l in pathlib.Path('.harness/baseline.txt').read_text().splitlines() if l]
 
 HEADINGS = {
+    'Experience': 'Experience',
     'Skills': 'Skills &amp; Technologies',
     'Certifications': 'Professional Certifications',
-    'Projects': 'My Projects',
 }
-starts = sorted(((rendered.find(h), k) for k, h in HEADINGS.items()))
+# Match the section's own <h2>, not the bare words: "View Experience" in the
+# hero CTA would otherwise set the Experience boundary far too early.
+starts = sorted(((rendered.find(f'>{h}</h2>'), k) for k, h in HEADINGS.items()))
 if starts[0][0] == -1:
     print('FAIL: a section heading is missing from the render')
     sys.exit(1)

@@ -10,9 +10,9 @@ export const profile = {
   title: 'Software Developer / DevOps Engineer',
   greeting: 'Welcome to My Website!',
   bio: [
-    "Highly motivated and passionate software developer with proven experience implementing software and DevOps solutions. My work has spanned a broad spectrum of tasks — from designing and writing software for embedded, mission-critical real-time systems to creating and optimizing CI/CD pipelines and writing Helm charts for Kubernetes applications.",
-    "This website showcases my personal projects and tools—both those created to streamline my team's workflow and others developed for learning and enjoyment.",
-    'Enjoy exploring my work, and feel free to contact me.',
+    'Full-cycle software developer who writes code and owns the pipeline. My experience spans mission-critical real-time C++, Kubernetes-based DevOps infrastructure, and CI/CD design, which gives me an end-to-end view from code commit to production deployment.',
+    "More than three years of that has been on the DevOps side, and I kept those responsibilities when I moved into a developer role: CI/CD pipelines and Helm charts, SaaS provisioning and monitoring, and supporting the teams that depend on both.",
+    'Outside work I solve CTF challenges, reverse engineering and network recon, which keeps me close to how systems actually break.',
   ],
   resumePath: '/resume/resume.pdf',
 } as const;
