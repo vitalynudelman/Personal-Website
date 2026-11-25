@@ -1,29 +1,21 @@
-# Build stage
-FROM node:20.18-alpine AS build
+# Build stage — bun installs from the lockfile, then compiles the static bundle.
+FROM oven/bun:1.3-alpine AS build
 
-# Set the working directory in the container
 WORKDIR /app
 
-# Copy the rest of the application code
+# Dependencies first, so a source-only change reuses the installed layer.
+COPY package.json bun.lock ./
+RUN bun install --frozen-lockfile
+
 COPY . .
+RUN bun run build
 
-# Install the application dependencies
-RUN npm install --verbose
-
-# Build the React app for production
-RUN npm run build
-
-# Nginx stage
+# Serve stage — nginx over the static output.
 FROM nginx:alpine AS production
 
-# Copy the build output to replace the default nginx contents.
-COPY --from=build /app/build /usr/share/nginx/html
-
-# Copy custom Nginx config
+COPY --from=build /app/dist /usr/share/nginx/html
 COPY nginx.conf /etc/nginx/conf.d/default.conf
 
-# Expose port 80
 EXPOSE 80
 
-# Start Nginx server
 CMD ["nginx", "-g", "daemon off;"]

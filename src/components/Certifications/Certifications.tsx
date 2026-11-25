@@ -1,88 +1,37 @@
-import React, { useState, useRef, useEffect } from 'react';
-import './Certifications.css';
+import { certifications } from '../../content/certifications';
+import Section from '../Section/Section';
+import styles from './Certifications.module.css';
 
-interface Certification {
-  name: string;
-  icon: string;
-  date: string;
-  issuer: string;
-  description: string;
-}
-
-function Certifications(): JSX.Element {
-  const [animateCerts, setAnimateCerts] = useState<boolean>(false);
-  const certsRef = useRef<HTMLElement>(null);
-
-  const certifications: Certification[] = [
-    {
-      name: 'AWS Certified Solutions Architect',
-      icon: 'certifications/aws-solutions-architect-associate.png',
-      date: 'Obtained: Dec 2023',
-      issuer: 'Amazon Web Services',
-      description: 'Validates expertise in designing distributed systems on AWS'
-    },
-    {
-      name: 'DevOps Certified Practitioner',
-      icon: 'certifications/certified-devops-practitioner.png',
-      date: 'Obtained: Jul 2022',
-      issuer: 'DevOps Institute',
-      description: 'Demonstrates mastery of DevOps principles and practices'
-    }
-  ];
-
-  useEffect(() => {
-    const observer = new IntersectionObserver(
-      ([entry]) => {
-        if (entry.isIntersecting) {
-          setAnimateCerts(true);
-          observer.unobserve(entry.target);
-        }
-      },
-      { threshold: 0.1 }
-    );
-
-    const current = certsRef.current;
-    if (current) {
-      observer.observe(current);
-    }
-
-    return () => {
-      if (current) {
-        observer.unobserve(current);
-      }
-    };
-  }, []);
-
+export default function Certifications() {
   return (
-    <section className="Certifications" ref={certsRef} id="certifications">
-      <div className="section-header">
-        <h2 className="section-title">Professional Certifications</h2>
-        <div className="section-subtitle">Credentials validating my technical expertise</div>
-      </div>
-
-      <div className={`certification-list ${animateCerts ? 'animate' : ''}`}>
-        {certifications.map((certification, index) => (
-          <div
-            className="certification-card"
-            key={index}
-            style={{ animationDelay: `${0.2 * index}s` }}
-          >
-            <div className="certification-image">
-              <img src={certification.icon} alt={certification.name} />
+    <Section
+      id="certifications"
+      title="Professional Certifications"
+      subtitle="Credentials validating my technical expertise"
+    >
+      <ul className={styles.grid}>
+        {certifications.map((certification) => (
+          <li key={certification.name} className={styles.card}>
+            <img
+              src={certification.icon}
+              alt=""
+              width={72}
+              height={72}
+              loading="lazy"
+              className={styles.badge}
+            />
+            <div className={styles.details}>
+              <h3 className={styles.name}>{certification.name}</h3>
+              <p className={styles.meta}>
+                <span>{certification.issuer}</span>
+                <span aria-hidden="true">&middot;</span>
+                <span>{certification.date}</span>
+              </p>
+              <p className={styles.description}>{certification.description}</p>
             </div>
-            <div className="certification-details">
-              <h3 className="certification-title">{certification.name}</h3>
-              <div className="certification-meta">
-                <span className="certification-issuer">{certification.issuer}</span>
-                <span className="certification-date">{certification.date}</span>
-              </div>
-              <p className="certification-description">{certification.description}</p>
-            </div>
-          </div>
+          </li>
         ))}
-      </div>
-    </section>
+      </ul>
+    </Section>
   );
 }
-
-export default Certifications;
